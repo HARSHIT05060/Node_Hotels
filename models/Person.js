@@ -7,27 +7,27 @@ const personSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    age:{
+    age: {
         type: Number
     },
-    work:{
+    work: {
         type: String,
         enum: ['chef', 'waiter', 'manager'],
         required: true
     },
-    mobile:{
+    mobile: {
         type: String,
         required: true
     },
-    email:{
+    email: {
         type: String,
         required: true,
         unique: true
     },
-    address:{
+    address: {
         type: String
     },
-    salary:{
+    salary: {
         type: Number,
         required: true
     },
@@ -41,33 +41,33 @@ const personSchema = new mongoose.Schema({
     }
 });
 
-personSchema.pre('save', async function(next){
+personSchema.pre('save', async function (next) {
     const person = this;
 
     // Hash the password only if it has been modified (or is new)
-    if(!person.isModified('password')) return next();
+    if (!person.isModified('password')) return next();
 
-    try{
+    try {
         // hash password generation
         const salt = await bcrypt.genSalt(10);
 
         // hash password
         const hashedPassword = await bcrypt.hash(person.password, salt);
-        
+
         // Override the plain password with the hashed one
         person.password = hashedPassword;
         next();
-    }catch(err){
+    } catch (err) {
         return next(err);
     }
 })
 
-personSchema.methods.comparePassword = async function(candidatePassword){
-    try{
+personSchema.methods.comparePassword = async function (candidatePassword) {
+    try {
         // Use bcrypt to compare the provided password with the hashed password
         const isMatch = await bcrypt.compare(candidatePassword, this.password);
         return isMatch;
-    }catch(err){
+    } catch (err) {
         throw err;
     }
 }

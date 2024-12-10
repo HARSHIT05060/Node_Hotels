@@ -27,7 +27,7 @@ router.post('/signup', async (req, res) =>{
     }
     catch(err){
         console.log(err);
-        res.status(500).json({error: 'Internal Server Error'});
+        res.status(500).json({error: 'Internal Server Error '});
     }
 })
 
@@ -52,7 +52,7 @@ router.post('/login', async(req, res) => {
         }
         const token = generateToken(payload);
 
-        // resturn token as response
+        // return token as response
         res.json({token})
     }catch(err){
         console.error(err);
@@ -90,7 +90,7 @@ router.get('/', jwtAuthMiddleware, async (req, res) =>{
 
 router.get('/:workType', async(req, res)=>{
     try{
-        const workType = req.params.workType; // // Extract the work type from the URL parameter
+        const workType = req.params.workType;    // Extract the work type from the URL parameter
         if(workType == 'chef' || workType == 'manager' || workType == 'waiter' ){
             const response = await Person.find({work: workType});
             console.log('response fetched');
@@ -119,6 +119,7 @@ router.put('/:id', async (req, res)=>{
         }
 
         console.log('data updated');
+
         res.status(200).json(response);
     }catch(err){
         console.log(err);
